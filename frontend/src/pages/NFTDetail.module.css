@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.image {
+  max-width: 400px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.details {
+  flex: 1;
+  min-width: 280px;
+}
+
+.price {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4a90d9;
+}
+
+.seller {
+  font-family: monospace;
+  color: #999;
+}
+
+.buyButton {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  background: #4a90d9;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.buyButton:hover {
+  background: #357abd;
+}
