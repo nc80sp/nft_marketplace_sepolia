@@ -58,6 +58,22 @@ export default function NFTDetail() {
         value: listing.price,
       });
       await tx.wait();
+
+      if (window.ethereum) {
+        try {
+          await window.ethereum.request({
+            method: "wallet_watchAsset",
+            params: {
+              type: "ERC721",
+              options: {
+                address: address,
+                tokenId: tokenId,
+              },
+            },
+          });
+        } catch {}
+      }
+
       setTxStatus("購入成功！");
       setListing(null);
     } catch (error) {

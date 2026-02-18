@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useWallet } from "../context/WalletContext";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../utils/pinata";
 import { getNFTContract } from "../utils/contracts";
+import addresses from "../constants/addresses.json";
 import styles from "./MintPage.module.css";
 
 export default function MintPage() {
@@ -35,7 +36,27 @@ export default function MintPage() {
       setStatus("NFTをミント中...");
       const nftContract = getNFTContract(signer);
       const tx = await nftContract.mint(tokenURI);
-      await tx.wait();
+      const receipt = await tx.wait();
+
+      const mintEvent = receipt.logs.find(
+        (log) => log.address.toLowerCase() === addresses.nft.toLowerCase() && log.topics.length === 4
+      );
+      const mintedTokenId = mintEvent ? parseInt(mintEvent.topics[3], 16).toString() : null;
+
+      if (mintedTokenId !== null && window.ethereum) {
+        try {
+          await window.ethereum.request({
+            method: "wallet_watchAsset",
+            params: {
+              type: "ERC721",
+              options: {
+                address: addresses.nft,
+                tokenId: mintedTokenId,
+              },
+            },
+          });
+        } catch {}
+      }
 
       setStatus("ミント成功！");
       setName("");
