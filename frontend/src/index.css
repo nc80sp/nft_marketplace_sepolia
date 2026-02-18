@@ -1,0 +1,19 @@
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  color: #e0e0e0;
+  background-color: #0f0f23;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+a {
+  color: #4a90d9;
+}
