@@ -42,7 +42,7 @@ Ethereum Sepolia テストネット上で動作するNFTマーケットプレイ
 
 ### Components
 
-- `ConnectWallet` — MetaMask接続ボタン（ヘッダー）
+- `ConnectWallet` — MetaMask接続ボタン + アドレス + Sepolia ETH残高表示（ヘッダー）
 - `NFTCard` — サムネイル・名前・価格表示カード
 - `ListingForm` — 出品価格入力フォーム
 
@@ -50,7 +50,7 @@ Ethereum Sepolia テストネット上で動作するNFTマーケットプレイ
 
 - ルーティング: React Router v6
 - スタイリング: CSS Modules
-- 状態管理: useState / useContext（ウォレット接続状態をContextで管理）
+- 状態管理: useState / useContext（ウォレット接続状態・Sepolia ETH残高をContextで管理）
 
 ## Data Flow
 

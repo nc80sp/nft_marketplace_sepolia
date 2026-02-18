@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NFT Marketplace - Screen Designs</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; padding: 40px 20px; }
+
+  h1.page-title { text-align: center; font-size: 32px; margin-bottom: 60px; color: #fff; }
+
+  /* Screen transition diagram */
+  .diagram-section { max-width: 1000px; margin: 0 auto 80px; }
+  .diagram-section h2 { font-size: 24px; margin-bottom: 30px; text-align: center; color: #4a90d9; }
+
+  .flow-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 40px;
+    background: #16213e;
+    border-radius: 12px;
+    border: 1px solid #333;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .flow-node {
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    min-width: 150px;
+  }
+  .flow-page { background: #4a90d9; color: #fff; }
+  .flow-action { background: #2c3e50; color: #ccc; border: 1px dashed #666; font-weight: normal; font-size: 12px; min-width: 120px; }
+  .flow-arrow { color: #666; font-size: 24px; }
+  .flow-arrow-down { font-size: 28px; color: #666; }
+  .flow-label { font-size: 11px; color: #999; text-align: center; }
+  .flow-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .flow-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  /* Wireframe section */
+  .screen-section { max-width: 900px; margin: 0 auto 80px; }
+  .screen-section h2 { font-size: 24px; margin-bottom: 10px; color: #4a90d9; }
+  .screen-section .screen-desc { color: #999; margin-bottom: 20px; font-size: 14px; }
+
+  /* Wireframe container */
+  .wireframe {
+    background: #0f0f23;
+    border: 2px solid #333;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  /* Browser chrome */
+  .browser-bar {
+    background: #222;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #333;
+  }
+  .browser-dots { display: flex; gap: 6px; }
+  .browser-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-red { background: #ff5f56; }
+  .dot-yellow { background: #ffbd2e; }
+  .dot-green { background: #27c93f; }
+  .browser-url {
+    flex: 1;
+    background: #1a1a2e;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 4px 12px;
+    color: #999;
+    font-size: 12px;
+  }
+
+  /* Header */
+  .wf-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid #333;
+    background: #0f0f23;
+  }
+  .wf-logo { font-size: 18px; font-weight: bold; color: #fff; }
+  .wf-nav { display: flex; gap: 20px; }
+  .wf-nav a { color: #999; text-decoration: none; font-size: 14px; }
+  .wf-nav a.active { color: #fff; }
+  .wf-connect-btn {
+    padding: 8px 16px;
+    background: #4a90d9;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .wf-connected {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .wf-wallet-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  .wf-address {
+    font-family: monospace;
+    color: #4a90d9;
+    background: #1a1a3e;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  .wf-balance {
+    font-family: monospace;
+    color: #27ae60;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .wf-disconnect {
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid #666;
+    color: #999;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  /* Main content */
+  .wf-main { padding: 24px; min-height: 400px; }
+
+  /* Cards grid */
+  .wf-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .wf-card {
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s;
+    cursor: pointer;
+  }
+  .wf-card:hover { transform: translateY(-2px); }
+  .wf-card-img {
+    width: 100%;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+  }
+  .wf-card-info { padding: 12px; }
+  .wf-card-info h4 { font-size: 14px; margin-bottom: 6px; color: #fff; }
+  .wf-card-price { color: #4a90d9; font-weight: bold; font-size: 14px; }
+
+  /* Form */
+  .wf-form { max-width: 480px; margin: 0 auto; }
+  .wf-form-group { margin-bottom: 16px; }
+  .wf-form-group label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #ccc; }
+  .wf-input {
+    width: 100%;
+    padding: 10px 12px;
+    background: #1a1a2e;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+  }
+  .wf-textarea { min-height: 80px; resize: vertical; }
+  .wf-file-input {
+    width: 100%;
+    padding: 30px;
+    background: #1a1a3e;
+    border: 2px dashed #444;
+    border-radius: 8px;
+    color: #999;
+    text-align: center;
+    font-size: 14px;
+  }
+  .wf-submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: #4a90d9;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .wf-submit-btn:hover { background: #357abd; }
+
+  /* Detail page */
+  .wf-detail { display: flex; gap: 40px; flex-wrap: wrap; }
+  .wf-detail-img {
+    width: 380px;
+    height: 380px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+  }
+  .wf-detail-info { flex: 1; min-width: 280px; }
+  .wf-detail-info h1 { font-size: 28px; margin-bottom: 12px; }
+  .wf-detail-info .desc { color: #999; margin-bottom: 20px; line-height: 1.6; }
+  .wf-price-tag { font-size: 28px; font-weight: bold; color: #4a90d9; margin-bottom: 8px; }
+  .wf-seller { font-family: monospace; color: #777; font-size: 13px; margin-bottom: 20px; }
+  .wf-buy-btn {
+    padding: 14px 32px;
+    background: #4a90d9;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .wf-buy-btn:hover { background: #357abd; }
+
+  /* My NFTs */
+  .wf-my-card-actions { padding: 0 12px 12px; }
+  .wf-list-form {
+    display: flex;
+    gap: 6px;
+  }
+  .wf-list-input {
+    flex: 1;
+    padding: 6px 8px;
+    background: #1a1a2e;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 13px;
+  }
+  .wf-list-btn {
+    padding: 6px 14px;
+    background: #4a90d9;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .wf-cancel-btn {
+    padding: 6px 14px;
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .wf-listed-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #27ae60;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  /* Annotations */
+  .annotation {
+    margin-top: 20px;
+    padding: 16px;
+    background: #16213e;
+    border-left: 3px solid #4a90d9;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: #bbb;
+    line-height: 1.8;
+  }
+  .annotation strong { color: #4a90d9; }
+
+  /* Section divider */
+  .divider { border: none; border-top: 1px solid #333; margin: 60px auto; max-width: 200px; }
+
+  /* Color palette for card images */
+  .bg-1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .bg-2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+  .bg-3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+  .bg-4 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+  .bg-5 { background: linear-gradient(135deg, #fa709a, #fee140); }
+  .bg-6 { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+  .bg-7 { background: linear-gradient(135deg, #fccb90, #d57eeb); }
+  .bg-8 { background: linear-gradient(135deg, #e0c3fc, #8ec5fc); }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">NFT Marketplace - Screen Designs</h1>
+
+<!-- ==================== SCREEN TRANSITION DIAGRAM ==================== -->
+<div class="diagram-section">
+  <h2>Screen Transition Diagram</h2>
+  <div class="flow-diagram">
+
+    <!-- Row 1: Header (common) -->
+    <div class="flow-row">
+      <div class="flow-node flow-action" style="min-width: 600px; border: 1px solid #4a90d9;">
+        Header (common): [Logo] [Home] [Mint] [My NFTs] [Connect Wallet]
+      </div>
+    </div>
+    <div class="flow-arrow-down">&darr;</div>
+
+    <!-- Row 2: Main pages -->
+    <div class="flow-row">
+      <div class="flow-group">
+        <div class="flow-node flow-page">Home<br><small>/</small></div>
+        <div class="flow-label">NFT card click</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-group">
+        <div class="flow-node flow-page">NFT Detail<br><small>/nft/:addr/:id</small></div>
+      </div>
+    </div>
+
+    <div class="flow-arrow-down">&darr; nav link</div>
+
+    <div class="flow-row">
+      <div class="flow-group">
+        <div class="flow-node flow-page">Mint<br><small>/mint</small></div>
+        <div class="flow-label">mint success</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-group">
+        <div class="flow-node flow-action">TX confirmed</div>
+        <div class="flow-label">auto redirect</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-group">
+        <div class="flow-node flow-page">My NFTs<br><small>/my-nfts</small></div>
+      </div>
+    </div>
+
+    <div class="flow-arrow-down">&darr;</div>
+
+    <!-- Row 3: Actions from My NFTs -->
+    <div class="flow-row">
+      <div class="flow-group">
+        <div class="flow-node flow-action">List (approve + list)</div>
+        <div class="flow-label">sell NFT</div>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-group">
+        <div class="flow-node flow-page">Home<br><small>/</small></div>
+        <div class="flow-label">appears in listings</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 16px; display:flex; gap: 40px; flex-wrap: wrap; justify-content: center;">
+      <div class="flow-row">
+        <div class="flow-node flow-action">Cancel Listing</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node flow-action">removed from Home</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-node flow-action">Buy (from Detail)</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node flow-action">NFT transferred to buyer</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="annotation">
+    <strong>Wallet not connected:</strong> Mint / My NFTs page shows "Connect Wallet" message<br>
+    <strong>Wallet connected:</strong> header shows shortened address (0x1234...abcd) + Sepolia ETH balance + Disconnect button<br>
+    <strong>Balance:</strong> provider.getBalance() for Sepolia ETH, auto-refresh on account change<br>
+    <strong>All TX operations:</strong> MetaMask popup for user confirmation
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== SCREEN 1: HOME ==================== -->
+<div class="screen-section">
+  <h2>1. Home (/) - Marketplace Listings</h2>
+  <p class="screen-desc">出品中のNFT一覧をカードグリッドで表示。各カードクリックで詳細ページへ遷移。</p>
+
+  <div class="wireframe">
+    <div class="browser-bar">
+      <div class="browser-dots">
+        <div class="browser-dot dot-red"></div>
+        <div class="browser-dot dot-yellow"></div>
+        <div class="browser-dot dot-green"></div>
+      </div>
+      <div class="browser-url">localhost:5173/</div>
+    </div>
+
+    <div class="wf-header">
+      <div class="wf-logo">NFT Marketplace</div>
+      <div class="wf-nav">
+        <a class="active" href="#">Home</a>
+        <a href="#">Mint</a>
+        <a href="#">My NFTs</a>
+      </div>
+      <div class="wf-connected">
+        <div class="wf-wallet-info">
+          <span class="wf-address">0x1234...abcd</span>
+          <span class="wf-balance">1.2345 ETH</span>
+        </div>
+        <button class="wf-disconnect">Disconnect</button>
+      </div>
+    </div>
+
+    <div class="wf-main">
+      <h2 style="margin-bottom: 4px;">Marketplace</h2>
+      <p style="color: #777; font-size: 14px; margin-bottom: 16px;">Listed NFTs for sale</p>
+      <div class="wf-grid">
+        <div class="wf-card">
+          <div class="wf-card-img bg-1">&#x1f3a8;</div>
+          <div class="wf-card-info">
+            <h4>Digital Sunset</h4>
+            <div class="wf-card-price">0.05 ETH</div>
+          </div>
+        </div>
+        <div class="wf-card">
+          <div class="wf-card-img bg-2">&#x1f308;</div>
+          <div class="wf-card-info">
+            <h4>Neon Dreams</h4>
+            <div class="wf-card-price">0.12 ETH</div>
+          </div>
+        </div>
+        <div class="wf-card">
+          <div class="wf-card-img bg-3">&#x1f30a;</div>
+          <div class="wf-card-info">
+            <h4>Ocean Wave</h4>
+            <div class="wf-card-price">0.08 ETH</div>
+          </div>
+        </div>
+        <div class="wf-card">
+          <div class="wf-card-img bg-4">&#x1f331;</div>
+          <div class="wf-card-info">
+            <h4>Green World</h4>
+            <div class="wf-card-price">0.03 ETH</div>
+          </div>
+        </div>
+        <div class="wf-card">
+          <div class="wf-card-img bg-5">&#x2b50;</div>
+          <div class="wf-card-info">
+            <h4>Star Light</h4>
+            <div class="wf-card-price">0.15 ETH</div>
+          </div>
+        </div>
+        <div class="wf-card">
+          <div class="wf-card-img bg-6">&#x1f48e;</div>
+          <div class="wf-card-info">
+            <h4>Crystal Gem</h4>
+            <div class="wf-card-price">0.2 ETH</div>
+          </div>
+        </div>
+        <div class="wf-card">
+          <div class="wf-card-img bg-7">&#x1f525;</div>
+          <div class="wf-card-info">
+            <h4>Fire Spirit</h4>
+            <div class="wf-card-price">0.1 ETH</div>
+          </div>
+        </div>
+        <div class="wf-card">
+          <div class="wf-card-img bg-8">&#x2601;</div>
+          <div class="wf-card-info">
+            <h4>Cloud Nine</h4>
+            <div class="wf-card-price">0.07 ETH</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation">
+    <strong>Card grid:</strong> auto-fill, min 220px, responsive<br>
+    <strong>Card click:</strong> /nft/:address/:tokenId へ遷移<br>
+    <strong>Empty state:</strong> "出品中のNFTはありません" message<br>
+    <strong>Loading state:</strong> "Loading..." message while fetching events
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== SCREEN 2: MINT ==================== -->
+<div class="screen-section">
+  <h2>2. Mint (/mint) - Create New NFT</h2>
+  <p class="screen-desc">画像・名前・説明を入力してNFTをミントするフォーム。IPFS upload + on-chain mint。</p>
+
+  <div class="wireframe">
+    <div class="browser-bar">
+      <div class="browser-dots">
+        <div class="browser-dot dot-red"></div>
+        <div class="browser-dot dot-yellow"></div>
+        <div class="browser-dot dot-green"></div>
+      </div>
+      <div class="browser-url">localhost:5173/mint</div>
+    </div>
+
+    <div class="wf-header">
+      <div class="wf-logo">NFT Marketplace</div>
+      <div class="wf-nav">
+        <a href="#">Home</a>
+        <a class="active" href="#">Mint</a>
+        <a href="#">My NFTs</a>
+      </div>
+      <div class="wf-connected">
+        <div class="wf-wallet-info">
+          <span class="wf-address">0x1234...abcd</span>
+          <span class="wf-balance">1.2345 ETH</span>
+        </div>
+        <button class="wf-disconnect">Disconnect</button>
+      </div>
+    </div>
+
+    <div class="wf-main">
+      <div class="wf-form">
+        <h2 style="text-align: center; margin-bottom: 24px;">Mint NFT</h2>
+
+        <div class="wf-form-group">
+          <label>Name *</label>
+          <input type="text" class="wf-input" placeholder="NFT name" value="My Artwork">
+        </div>
+
+        <div class="wf-form-group">
+          <label>Description</label>
+          <textarea class="wf-input wf-textarea" placeholder="Describe your NFT...">A beautiful digital artwork created with passion.</textarea>
+        </div>
+
+        <div class="wf-form-group">
+          <label>Image *</label>
+          <div class="wf-file-input">
+            &#x1f4ce; Drop image here or click to upload<br>
+            <small style="color: #666;">PNG, JPG, GIF (max 10MB)</small>
+          </div>
+        </div>
+
+        <button class="wf-submit-btn">Mint</button>
+
+        <p style="text-align: center; margin-top: 16px; color: #4a90d9; font-size: 14px;">
+          &#x2139; MetaMask will ask for transaction confirmation
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation">
+    <strong>Processing states:</strong><br>
+    1. "画像をIPFSにアップロード中..." (uploading image)<br>
+    2. "メタデータをIPFSにアップロード中..." (uploading metadata JSON)<br>
+    3. "NFTをミント中..." (waiting for TX confirm)<br>
+    4. "ミント成功!" (done)<br>
+    <strong>Wallet not connected:</strong> button disabled, shows "ウォレットを接続してください"<br>
+    <strong>Validation:</strong> Name and Image are required fields
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== SCREEN 3: NFT DETAIL ==================== -->
+<div class="screen-section">
+  <h2>3. NFT Detail (/nft/:address/:tokenId) - View & Buy</h2>
+  <p class="screen-desc">NFTの詳細情報表示と購入ボタン。出品者本人には購入ボタンを非表示。</p>
+
+  <div class="wireframe">
+    <div class="browser-bar">
+      <div class="browser-dots">
+        <div class="browser-dot dot-red"></div>
+        <div class="browser-dot dot-yellow"></div>
+        <div class="browser-dot dot-green"></div>
+      </div>
+      <div class="browser-url">localhost:5173/nft/0xABC.../0</div>
+    </div>
+
+    <div class="wf-header">
+      <div class="wf-logo">NFT Marketplace</div>
+      <div class="wf-nav">
+        <a href="#">Home</a>
+        <a href="#">Mint</a>
+        <a href="#">My NFTs</a>
+      </div>
+      <div class="wf-connected">
+        <div class="wf-wallet-info">
+          <span class="wf-address">0x5678...efgh</span>
+          <span class="wf-balance">0.8721 ETH</span>
+        </div>
+        <button class="wf-disconnect">Disconnect</button>
+      </div>
+    </div>
+
+    <div class="wf-main">
+      <div class="wf-detail">
+        <div class="wf-detail-img bg-1" style="font-size: 100px;">&#x1f3a8;</div>
+        <div class="wf-detail-info">
+          <h1>Digital Sunset</h1>
+          <p class="desc">A stunning sunset captured in digital form. This artwork represents the beauty of nature transformed into pixels, with vibrant orange and purple tones.</p>
+
+          <div style="background: #16213e; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <p style="color: #999; font-size: 12px; margin-bottom: 4px;">Current Price</p>
+            <div class="wf-price-tag">0.05 ETH</div>
+            <div class="wf-seller">Seller: 0x1234...abcd</div>
+            <button class="wf-buy-btn" style="width: 100%;">Purchase</button>
+          </div>
+
+          <p style="color: #666; font-size: 12px;">
+            Contract: 0xABC...DEF<br>
+            Token ID: 0
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation">
+    <strong>Not listed:</strong> shows "現在出品されていません" instead of price/buy section<br>
+    <strong>Own NFT:</strong> Purchase button is hidden if connected wallet = seller<br>
+    <strong>Purchase flow:</strong> button click &rarr; MetaMask popup &rarr; "購入処理中..." &rarr; "購入成功!"<br>
+    <strong>Error:</strong> "エラー: insufficient funds" etc.
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== SCREEN 4: MY NFTs ==================== -->
+<div class="screen-section">
+  <h2>4. My NFTs (/my-nfts) - Manage Owned NFTs</h2>
+  <p class="screen-desc">所有NFTの一覧。未出品のNFTには出品フォーム、出品中のNFTにはキャンセルボタンを表示。</p>
+
+  <div class="wireframe">
+    <div class="browser-bar">
+      <div class="browser-dots">
+        <div class="browser-dot dot-red"></div>
+        <div class="browser-dot dot-yellow"></div>
+        <div class="browser-dot dot-green"></div>
+      </div>
+      <div class="browser-url">localhost:5173/my-nfts</div>
+    </div>
+
+    <div class="wf-header">
+      <div class="wf-logo">NFT Marketplace</div>
+      <div class="wf-nav">
+        <a href="#">Home</a>
+        <a href="#">Mint</a>
+        <a class="active" href="#">My NFTs</a>
+      </div>
+      <div class="wf-connected">
+        <div class="wf-wallet-info">
+          <span class="wf-address">0x1234...abcd</span>
+          <span class="wf-balance">1.2345 ETH</span>
+        </div>
+        <button class="wf-disconnect">Disconnect</button>
+      </div>
+    </div>
+
+    <div class="wf-main">
+      <h2 style="margin-bottom: 20px;">My NFTs</h2>
+
+      <div class="wf-grid">
+        <!-- Not listed NFT -->
+        <div class="wf-card">
+          <div class="wf-card-img bg-1">&#x1f3a8;</div>
+          <div class="wf-card-info">
+            <h4>Digital Sunset</h4>
+          </div>
+          <div class="wf-my-card-actions">
+            <div class="wf-list-form">
+              <input type="number" class="wf-list-input" placeholder="ETH" value="0.05">
+              <button class="wf-list-btn">List</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Listed NFT -->
+        <div class="wf-card">
+          <div class="wf-card-img bg-2">&#x1f308;</div>
+          <div class="wf-card-info">
+            <h4>Neon Dreams</h4>
+            <div class="wf-card-price">0.12 ETH</div>
+          </div>
+          <div class="wf-my-card-actions">
+            <span class="wf-listed-badge">Listed</span>
+            <button class="wf-cancel-btn">Cancel Listing</button>
+          </div>
+        </div>
+
+        <!-- Not listed NFT -->
+        <div class="wf-card">
+          <div class="wf-card-img bg-3">&#x1f30a;</div>
+          <div class="wf-card-info">
+            <h4>Ocean Wave</h4>
+          </div>
+          <div class="wf-my-card-actions">
+            <div class="wf-list-form">
+              <input type="number" class="wf-list-input" placeholder="ETH">
+              <button class="wf-list-btn">List</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Listed NFT -->
+        <div class="wf-card">
+          <div class="wf-card-img bg-5">&#x2b50;</div>
+          <div class="wf-card-info">
+            <h4>Star Light</h4>
+            <div class="wf-card-price">0.15 ETH</div>
+          </div>
+          <div class="wf-my-card-actions">
+            <span class="wf-listed-badge">Listed</span>
+            <button class="wf-cancel-btn">Cancel Listing</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation">
+    <strong>Not listed card:</strong> price input + "List" button (approve + listItem TX)<br>
+    <strong>Listed card:</strong> green "Listed" badge + price + red "Cancel Listing" button<br>
+    <strong>Listing flow:</strong> List click &rarr; MetaMask approve TX &rarr; MetaMask listItem TX &rarr; refresh<br>
+    <strong>Cancel flow:</strong> Cancel click &rarr; MetaMask cancelListing TX &rarr; refresh<br>
+    <strong>Wallet not connected:</strong> "ウォレットを接続してください" message<br>
+    <strong>No NFTs:</strong> "NFTを所有していません" message
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== SCREEN 5: WALLET NOT CONNECTED ==================== -->
+<div class="screen-section">
+  <h2>5. Wallet Not Connected State</h2>
+  <p class="screen-desc">ウォレット未接続時のヘッダーとページ表示。Home以外のページではアクション不可。</p>
+
+  <div class="wireframe">
+    <div class="browser-bar">
+      <div class="browser-dots">
+        <div class="browser-dot dot-red"></div>
+        <div class="browser-dot dot-yellow"></div>
+        <div class="browser-dot dot-green"></div>
+      </div>
+      <div class="browser-url">localhost:5173/my-nfts</div>
+    </div>
+
+    <div class="wf-header">
+      <div class="wf-logo">NFT Marketplace</div>
+      <div class="wf-nav">
+        <a href="#">Home</a>
+        <a href="#">Mint</a>
+        <a class="active" href="#">My NFTs</a>
+      </div>
+      <button class="wf-connect-btn">Connect Wallet</button>
+    </div>
+
+    <div class="wf-main" style="display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;">
+      <div style="font-size: 48px;">&#x1f512;</div>
+      <p style="font-size: 18px; color: #999;">ウォレットを接続してください</p>
+      <button class="wf-connect-btn" style="font-size: 16px; padding: 12px 24px;">Connect Wallet</button>
+    </div>
+  </div>
+
+  <div class="annotation">
+    <strong>Header:</strong> "Connect Wallet" button (blue) replaces address display<br>
+    <strong>Home page:</strong> listings are visible without wallet (read-only)<br>
+    <strong>Mint / My NFTs:</strong> shows connect prompt as above<br>
+    <strong>NFT Detail:</strong> shows details but Purchase button is disabled
+  </div>
+</div>
+
+</body>
+</html>

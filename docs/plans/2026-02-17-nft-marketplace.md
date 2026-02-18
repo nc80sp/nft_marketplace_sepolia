@@ -595,6 +595,16 @@ export function WalletProvider({ children }) {
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
+  const [balance, setBalance] = useState(null);
+
+  const fetchBalance = useCallback(async (browserProvider, address) => {
+    try {
+      const bal = await browserProvider.getBalance(address);
+      setBalance(ethers.formatEther(bal));
+    } catch {
+      setBalance(null);
+    }
+  }, []);
 
   const connectWallet = useCallback(async () => {
     if (!window.ethereum) {
@@ -608,17 +618,19 @@ export function WalletProvider({ children }) {
     setProvider(browserProvider);
     setSigner(walletSigner);
     setAccount(accounts[0]);
-  }, []);
+    await fetchBalance(browserProvider, accounts[0]);
+  }, [fetchBalance]);
 
   const disconnectWallet = useCallback(() => {
     setAccount(null);
     setProvider(null);
     setSigner(null);
+    setBalance(null);
   }, []);
 
   return (
     <WalletContext.Provider
-      value={{ account, provider, signer, connectWallet, disconnectWallet }}
+      value={{ account, provider, signer, balance, connectWallet, disconnectWallet }}
     >
       {children}
     </WalletContext.Provider>
@@ -637,14 +649,21 @@ import { useWallet } from "../context/WalletContext";
 import styles from "./ConnectWallet.module.css";
 
 export default function ConnectWallet() {
-  const { account, connectWallet, disconnectWallet } = useWallet();
+  const { account, balance, connectWallet, disconnectWallet } = useWallet();
 
   if (account) {
     return (
       <div className={styles.wallet}>
-        <span className={styles.address}>
-          {account.slice(0, 6)}...{account.slice(-4)}
-        </span>
+        <div className={styles.info}>
+          <span className={styles.address}>
+            {account.slice(0, 6)}...{account.slice(-4)}
+          </span>
+          {balance !== null && (
+            <span className={styles.balance}>
+              {parseFloat(balance).toFixed(4)} ETH
+            </span>
+          )}
+        </div>
         <button onClick={disconnectWallet} className={styles.button}>
           Disconnect
         </button>
@@ -669,9 +688,23 @@ export default function ConnectWallet() {
   gap: 8px;
 }
 
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
 .address {
   font-family: monospace;
   font-size: 14px;
+}
+
+.balance {
+  font-family: monospace;
+  font-size: 12px;
+  color: #27ae60;
+  font-weight: bold;
 }
 
 .button {
