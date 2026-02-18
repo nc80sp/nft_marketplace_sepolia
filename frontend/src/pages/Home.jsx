@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getMarketplaceContract, getNFTContract, getReadOnlyProvider } from "../utils/contracts";
 import { ipfsToHttp } from "../utils/pinata";
+import addresses from "../constants/addresses.json";
 import NFTCard from "../components/NFTCard";
 import styles from "./Home.module.css";
 
@@ -13,55 +14,38 @@ export default function Home() {
       try {
         const provider = getReadOnlyProvider();
         const marketplace = getMarketplaceContract(provider);
+        const nft = getNFTContract(provider);
+        const tokenCount = await nft.getTokenCounter();
 
-        const listedFilter = marketplace.filters.ItemListed();
-        const boughtFilter = marketplace.filters.ItemBought();
-        const canceledFilter = marketplace.filters.ItemCanceled();
+        const activeListings = [];
 
-        const [listedEvents, boughtEvents, canceledEvents] = await Promise.all([
-          marketplace.queryFilter(listedFilter),
-          marketplace.queryFilter(boughtFilter),
-          marketplace.queryFilter(canceledFilter),
-        ]);
+        for (let i = 0; i < tokenCount; i++) {
+          try {
+            const listing = await marketplace.getListing(addresses.nft, i);
+            if (listing.price > 0n) {
+              const tokenURI = await nft.tokenURI(i);
+              let name = null;
+              let image = null;
+              try {
+                const res = await fetch(ipfsToHttp(tokenURI));
+                const metadata = await res.json();
+                name = metadata.name;
+                image = metadata.image;
+              } catch {}
 
-        const activeListings = new Map();
-
-        for (const event of listedEvents) {
-          const key = `${event.args.nftAddress}-${event.args.tokenId}`;
-          activeListings.set(key, {
-            nftAddress: event.args.nftAddress,
-            tokenId: event.args.tokenId,
-            price: event.args.price,
-            seller: event.args.seller,
-          });
-        }
-
-        for (const event of boughtEvents) {
-          const key = `${event.args.nftAddress}-${event.args.tokenId}`;
-          activeListings.delete(key);
-        }
-
-        for (const event of canceledEvents) {
-          const key = `${event.args.nftAddress}-${event.args.tokenId}`;
-          activeListings.delete(key);
-        }
-
-        const listingsWithMetadata = await Promise.all(
-          Array.from(activeListings.values()).map(async (listing) => {
-            try {
-              const nft = getNFTContract(provider);
-              const tokenURI = await nft.tokenURI(listing.tokenId);
-              const metadataUrl = ipfsToHttp(tokenURI);
-              const res = await fetch(metadataUrl);
-              const metadata = await res.json();
-              return { ...listing, name: metadata.name, image: metadata.image };
-            } catch {
-              return { ...listing, name: null, image: null };
+              activeListings.push({
+                nftAddress: addresses.nft,
+                tokenId: i,
+                price: listing.price,
+                seller: listing.seller,
+                name,
+                image,
+              });
             }
-          })
-        );
+          } catch {}
+        }
 
-        setListings(listingsWithMetadata);
+        setListings(activeListings);
       } catch (error) {
         console.error("Failed to fetch listings:", error);
       } finally {
